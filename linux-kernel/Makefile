@@ -604,7 +604,7 @@ endif
 # set in the environment
 # Also any assignments in arch/$(ARCH)/Makefile take precedence over
 # this default value
-export KBUILD_IMAGE ?= vmlinux
+export KBUILD_IMAGE ?= uImage
 
 #
 # INSTALL_PATH specifies where to place the updated kernel and system map
