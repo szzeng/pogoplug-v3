@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Linux kernel version: 2.6.31.6
-# Sat Jun  7 23:46:38 2014
+# Sat Oct 30 17:40:45 2010
 #
 CONFIG_ARM=y
 CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -197,7 +197,7 @@ CONFIG_OXNAS_VERSION_OX820=y
 # CONFIG_OXNAS_VERSION_OX825 is not set
 CONFIG_FORCE_MAX_ZONEORDER=11
 CONFIG_OXNAS_PCIE_RESET_GPIO=44
-# CONFIG_ARCH_OXNAS_PCIE_DISABLE is not set
+CONFIG_ARCH_OXNAS_PCIE_DISABLE=y
 
 #
 # Oxford Semiconductor NAS Platform options
