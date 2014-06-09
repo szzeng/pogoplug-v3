@@ -16,8 +16,8 @@ if [ "$KEY_WORD" = "t" ]
 then
 rm wcdma-connect-chat
 rm disconnect-chat
-wget http://192.168.6.54/wcdma-connect-chat
-wget http://192.168.6.54/disconnect-chat
+wget http://192.168.2.100/wcdma-connect-chat
+wget http://192.168.2.100/disconnect-chat
 fi
 
 mkdir /etc/ppp/peers
@@ -26,7 +26,7 @@ if [ "$KEY_WORD" = "t" ]
 then
 cd /etc/ppp/peers
 rm wcdma-dailer
-wget http://192.168.6.54/wcdma-dailer
+wget http://192.168.2.100/wcdma-dailer
 fi
 
 #ifconfig eth0 down

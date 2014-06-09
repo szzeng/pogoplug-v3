@@ -83,7 +83,7 @@ echo "#############################"
 echo "## RETRIEVING FILES "
 echo "# Downloading uImage...(approx. < 3MB)"
 rm uImage
-wget http://192.168.6.60/uImage
+wget http://192.168.2.100/uImage
 
 if [ -f /tmp/uImage ]
 then	
