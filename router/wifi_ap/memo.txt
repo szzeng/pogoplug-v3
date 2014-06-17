@@ -1,0 +1,12 @@
+wpa_cli -iwlan0 scan
+wpa_cli -iwlan0 scan_results
+
+brctl addbr br0
+brctl addif br0 eth0
+brctl addif br0 wlan0
+ifconfig eth0 0
+ifconfig wlan0 0
+ifconfig br0 192.168.2.2 netmask 255.255.255.0 up
+
+http://bbs.chinaunix.net/thread-2050632-1-1.html
+http://fp-moon.iteye.com/blog/1468650

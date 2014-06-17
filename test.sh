@@ -8,8 +8,8 @@ mount /dev/sda1 /tmp/usb
 
 cd /tmp/usb/usr/lib/modules
 rm -rf 2.6.31.6_SMP_820
-rm ./xxx
-wget http://192.168.2.100/xxx
-tar jvxf ./xxx
+rm ./lib.tar.bz
+wget http://192.168.2.100/lib.tar.bz
+tar jvxf ./lib.tar.bz
 
 cd /root

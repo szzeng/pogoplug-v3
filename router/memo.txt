@@ -9,3 +9,6 @@ http://www.linuxso.com/linuxpeixun/10332.html
 make modules_install INSTALL_MOD_PATH=
 1 在路由器关闭DHCP后，PC设置了固定IP后，还需要设置网关，板子才能才能用WGET链接PC下载。
 2 
+
+iptables nat优化。
+http://orocos.diandian.com/post/2012-06-14/40027750710
