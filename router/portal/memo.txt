@@ -1,2 +1,6 @@
  ./configure CC=arm-none-linux-gnueabi-gcc --prefix=../buildroot --host=arm-linux
  make CC=arm-none-linux-gnueabi-gcc DESTDIR=../ -j8
+
+ 
+web pages:
+etc/nodogsplash/htdocs
