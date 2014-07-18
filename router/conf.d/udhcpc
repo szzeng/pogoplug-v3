@@ -1,0 +1,4 @@
+#
+# Parameters to be passed to udhcpc
+#
+UDHCPC_ARGS="-b -i eth1 -R -v &"
