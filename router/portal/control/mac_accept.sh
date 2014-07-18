@@ -5,11 +5,13 @@
 #Change the INPUT chains
 #iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 #iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-#Read allowed mac from file /root/dst_ip_blocked
-for i in $(grep -v '^#' /root/dst_ip_blocked)
+#Read allowed mac from file /root/mac_accept
+for i in $(grep -v '^#' ./mac_accepted)
 do
 echo $i
-   iptables -A INPUT  -i eth0 -d $i -j DROP
+   iptables -A FORWARD -o eth1 -m mac --mac-source $i -j ACCEPT
 done
 #Change the INPUT chain's default Policy to DROP
-iptables -P INPUT DROP
+#iptables -P INPUT DROP
+#Change the FORWARD chain to DROP
+iptables -A  FORWARD -o eth1 -j DROP
