@@ -18,7 +18,7 @@ done
 
 #========================================================
 
-#block dst ip
+#block destination ip
 iptables -N ndsBDS
 iptables -F ndsBDS
 iptables -D ndsAUT -m conntrack --ctstate RELATED,ESTABLISHED -j ndsBDS
@@ -29,3 +29,21 @@ echo $i
    iptables -I ndsBDS  -i eth0 -d $i -j DROP
 done
 iptables -A ndsBDS -j RETURN
+
+
+#========================================================
+
+#accept destination ip
+
+iptables -t nat -N ndsACC
+iptables -t nat -F ndsACC
+iptables -t nat -D ndsOUT -j ndsACC
+iptables -t nat -I ndsOUT -j ndsACC
+#iptables -t nat -D ndsOUT -m conntrack --ctstate RELATED,ESTABLISHED -j ndsACC
+#iptables -t nat -I ndsOUT -m conntrack --ctstate RELATED,ESTABLISHED -j ndsACC
+for i in $(grep -v '^#' /root/dst_ip_accepted)
+do
+echo $i
+   iptables -t nat -I ndsACC  -i eth0 -d $i -j ACCEPT
+done
+iptables -t nat -A ndsACC -j RETURN

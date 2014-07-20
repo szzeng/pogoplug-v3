@@ -4,6 +4,9 @@
 . /etc/rc.d/functions
 . /etc/conf.d/udhcpc
 
+#usb2eth drivers
+insmod /root/usbnet.ko
+insmod /root/dm9620.ko
 insmod /root/asix.ko
 
 PID=$(pidof -o %PPID /usr/sbin/udhcpd)
@@ -14,15 +17,19 @@ case "$1" in
     if [ $? -gt 0 ]; then
       stat_fail
     else
-      add_daemon udhcpd
+      add_daemon udhcpc
       stat_done
     fi
     ;;
   stop)
-    stat_busy "Stopping udhcpd daemon"
-	[[ -n "$PID" ]] && kill $PID &>/dev/null \
-	&& { rm_daemon $name; stat_done; } \
-	|| { stat_fail; exit 1; }
+    stat_busy "Stopping udhcpc daemon"
+		[[ ! -z $PID ]] && kill $PID &> /dev/null
+		if [[ $? -gt 0 ]]; then
+			stat_fail
+		else
+			rm_daemon udhcpc
+			stat_done
+		fi
     ;;
   restart)
     $0 stop

@@ -17,9 +17,13 @@ case "$1" in
     ;;
   stop)
     stat_busy "Stopping udhcpd daemon"
-	[[ -n "$PID" ]] && kill $PID &>/dev/null \
-	&& { rm_daemon $name; stat_done; } \
-	|| { stat_fail; exit 1; }
+		[[ ! -z $PID ]] && kill $PID &> /dev/null
+		if [[ $? -gt 0 ]]; then
+			stat_fail
+		else
+			rm_daemon udhcpd
+			stat_done
+		fi
 	;;
   restart)
     $0 stop

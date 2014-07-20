@@ -2,13 +2,13 @@
 
 . /etc/rc.conf
 . /etc/rc.d/functions
-. /etc/conf.d/functions
+. /etc/conf.d/dnsmasq
 
 PID=$(pidof -o %PPID /usr/sbin/dnsmasq)
 case "$1" in
   start)
     stat_busy "Starting dnsmasq daemon" 
-    [ -z "$PID" ] && /usr/sbin/udhcpc $DNSMASQ_ARGS
+    [ -z "$PID" ] && /usr/sbin/dnsmasq $DNSMASQ_ARGS
     if [ $? -gt 0 ]; then
       stat_fail
     else
@@ -18,16 +18,20 @@ case "$1" in
     ;;
   stop)
     stat_busy "Stopping dnsmasq daemon"
-	[[ -n "$PID" ]] && kill $PID &>/dev/null \
-	&& { rm_daemon $name; stat_done; } \
-	|| { stat_fail; exit 1; }
-    ;;
-  restart)
-    $0 stop
-    sleep 1
-    $0 start
-    ;;
-  *)
-    echo "usage: $0 {start|stop|restart}"  
+		[[ ! -z $PID ]] && kill $PID &> /dev/null
+		if [[ $? -gt 0 ]]; then
+			stat_fail
+		else
+			rm_daemon dnsmasq
+			stat_done
+		fi
+		;;
+	restart)
+		$0 stop
+		sleep 1
+		$0 start
+		;;
+	*)
+		echo "usage: $0 {start|stop|restart}"
 esac
 exit 0

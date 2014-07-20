@@ -14,13 +14,13 @@ echo "1">/proc/sys/net/ipv4/ip_forward
 iptables -F
 iptables -F -t nat
 
-iptables -A INPUT -i eth1 -j ACCEPT
+#iptables -A INPUT -i eth0 -j ACCEPT
 iptables -A INPUT -i lo -j ACCEPT
 #iptables -t nat -A POSTROUTING -o eth1 -s 192.168.2.0/24 -j MASQUERADE
 
 #iptables -t nat -A PREROUTING -i eth0 -p udp --dport 53 -j REDIRECT --to-port 53
-iptables -A INPUT -p udp -m udp --dport 53 -j ACCEPT
+#iptables -A INPUT -p udp -m udp --dport 53 -j ACCEPT
 #iptables -A INPUT -p tcp -m tcp --dport 53 -j ACCEPT
 
 iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
-iptables -A INPUT -i eth1 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A INPUT -i eth0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT

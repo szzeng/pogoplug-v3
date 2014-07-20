@@ -19,7 +19,6 @@ case "$1" in
 	renew|bound)
 		echo "Setting IP address $ip on $interface"
 		ifconfig $interface $ip $NETMASK $BROADCAST
-
 		if [ -n "$router" ] ; then
 			echo "Deleting routers"
 			while route del default gw 0.0.0.0 dev $interface ; do
@@ -33,7 +32,6 @@ case "$1" in
 				: $(( metric += 1 ))
 			done
 		fi
-
 		echo "Recreating $RESOLV_CONF"
 		# If the file is a symlink somewhere (like /etc/resolv.conf
 		# pointing to /run/resolv.conf), make sure things work.
@@ -45,6 +43,10 @@ case "$1" in
 			echo " Adding DNS server $i"
 			echo "nameserver $i" >> "$tmpfile"
 		done
+		
+		#another local dnsmasq 
+		echo " Adding dnsmasq DNS server 192.168.6.31"
+		echo "nameserver 192.168.6.31" >> "$tmpfile"
 		mv "$tmpfile" "$realconf"
 		;;
 esac
