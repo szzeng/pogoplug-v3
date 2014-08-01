@@ -1,0 +1,67 @@
+setenv ipaddr 192.168.1.1
+setenv serverip 192.168.1.100
+tftp 64000000 openwrt-oxnas-ox820-u-boot.bin
+go 64000000
+
+
+make -j8 ./package/boot/uboot-oxnas/{compile,install} V=99 
+
+
+#define MIN_RESEVED_PEBS 20
+
+
+#define CONFIG_EXTRA_ENV_SETTINGS	\
+	"load_kernel_ubi=ubi readvol 0x62000000 kernel;\0" \
+	"load_kernel_rescue=nand read 0x62000000 0x4e0000 0x400000;\0" \
+	"load_kernel_dhcp=dhcp 0x62000000 oxnas-rescue.bin;\0" \
+	"boot_kernel=bootm 0x62000000;\0" \
+	"boot_ubi=run load_kernel_ubi && run boot_kernel;\0" \
+	"boot_rescue=run load_kernel_rescue && run boot_kernel;\0" \
+	"boot_dhcp=run load_kernel_dhcp && run boot_kernel;\0" \
+	"normalboot=run boot_ubi; run boot_rescue; run boot_dhcp;\0" \
+	"firstboot=bootm 0x640a0000; setenv bootcmd run normalboot; " \
+	"setenv firstboot; saveenv; run bootcmd; \0" \
+	"bootcmd=run firstboot; \0" \
+	"ethaddr=00:25:31:01:4C:E7\0" \
+	"console=" CONFIG_DEFAULT_CONSOLE \
+	"bootargs=" CONFIG_BOOTARGS "\0" \
+	"mtdids=" MTDIDS_DEFAULT "\0" \
+	"mtdparts=" MTDPARTS_DEFAULT "\0" \
+
+1
+
+setenv ipaddr 192.168.1.1
+setenv serverip 192.168.1.100
+tftp 64000000 openwrt-oxnas-ox820-u-boot.bin
+setenv boot_openwrt nand read 0x64000000 0x440000 0x86000 \; go 64000000
+setenv bootcmd run boot_openwrt
+saveenv
+go 64000000 
+
+2/输入上面命令后，回运行新的uboot，按任意键进入新的uboot，输入命令（把uboot刷到其他位置，不破坏原有uboot，并启动临时系统）
+setenv ipaddr 192.168.1.1
+setenv serverip 192.168.1.100
+nand erase 0x440000 0x86000	（已刷好新uboot此步骤可省略）
+nand write 64000000 0x440000 0x86000	（已刷好新uboot此步骤可省略）
+
+
+#################手动分区生成ubifs################################
+##创建UBI分区
+ubi create ubootenv 0x4000 （16KB）
+ubi create kernel 0x500000  (5MB)
+ubi create rootfs 0x1400000   （20MB）
+ubi create rootfs_data    (~84MB)
+
+下载与烧录kernel
+tftp 62000000 openwrt-oxnas-pogoplug-v3-fit-uImage.bin
+ubi write 0x62000000 kernel 0x500000
+
+tftp 62000000 rootfs
+ubi write 0x62000000 rootfs 0x??????
+
+
+
+################ubifs镜像###############################
+tftp 62000000 openwrt-oxnas-pogoplug-v3-ubifs-ubinized.bin
+nand erase 0x00e00000 0x07200000
+nand write 62000000 0x00e00000 ？？？？？
